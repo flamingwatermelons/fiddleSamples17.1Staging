@@ -3,15 +3,17 @@ $(function () {
 				autoGenerateColumns: false,
 				width: "100%",
 				height: "500px",
+			    rowVirtualization: true,
+			    virtualizationMode: "continuous",
 				columns: [
 					{ headerText: "Order ID", key: "OrderID", dataType: "number", width: "0%", hidden: true },
 					{ headerText: "Ship Country", key: "ShipCountry", dataType: "string", width: "12%" },
 					{ headerText: "Order Date", key: "OrderDate", dataType: "date", width: "18%" },
-					{ headerText: "Unit Price", key: "UnitPrice", dataType: "number", width: "17%" },
-					{ headerText: "Discount", key: "Discount", dataType: "number", width: "13%" },
 					{ headerText: "Ship Name", key: "ShipName", dataType: "string", width: "14%" },
 					{ headerText: "Ship City", key: "ShipCity", dataType: "string", width: "13%" },
-					{ headerText: "Customer City", key: "City", dataType: "string", width: "13%" }
+					{ headerText: "Customer City", key: "City", dataType: "string", width: "13%" },
+					{ headerText: "Unit Price", key: "UnitPrice", dataType: "number", width: "17%" },
+					{ headerText: "Discount", key: "Discount", dataType: "number", width: "13%" },
 				],
 				dataSource: northwindInvoices,
 				features: [
@@ -21,18 +23,6 @@ $(function () {
 						groupSummaries: [
 							{
 								summaryFunction: "Sum", label: "Sum = ", format: ".##"
-							},
-							{
-								summaryFunction: "Count", label: "Count = "
-							},
-							{
-								summaryFunction: "Avg", label: "Avg = ", format: ".##"
-							},
-							{
-								summaryFunction: "Min", label: "Min = "
-							},
-							{
-								summaryFunction: "Max", label: "Max = "
 							}
 						],
 						columnSettings: [
@@ -62,9 +52,6 @@ $(function () {
 						summarySettings: {
 							summaryFormat: "#"
 						}
-					},
-					{
-						name: "Paging"
 					},
 					{
 						name: "Filtering"
