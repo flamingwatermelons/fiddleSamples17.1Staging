@@ -2,8 +2,8 @@
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 <script src="http://staging.igniteui.local/17-1/IgniteUI/js/infragistics.loader.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<div class="actions" id="tabs">
+
+<div class="actions spreadsheet-sample" id="tabs">
 		<ul>
 			<li><a href="#tabs-1">Show</a></li>
 			<li><a href="#tabs-2">Zoom Level</a></li>
@@ -11,173 +11,77 @@
 			<li><a href="#tabs-4">Formatting</a></li>
 			<li><a href="#tabs-5">Delete</a></li>
 		</ul>
-		<div class="show" id="tabs-1">
-			<div id="gridlines"></div>Gridlines <br>
-			<div id="headings"></div>Headings <br>
-			<div id="formulabar"></div>Formula bar
+
+		<div class="show clearfix" id="tabs-1">
+			<div class="show-row">
+                <span for="gridlines" class="show-row-text">
+                    <div id="gridlines" class="show-row-checkbox"></div>
+                    Gridlines
+                </span>
+            </div>
+            <div class="show-row">
+                <span for="headings" class="show-row-text">
+                    <div id="headings" class="show-row-checkbox"></div>
+                    Headings
+                </span>
+            </div>
+            <div class="show-row">
+                <span for="formulabar" class="show-row-text">
+                    <div id="formulabar" class="show-row-checkbox"></div>
+                    Formula bar
+                </span>
+            </div>
+        </div>
+
+		<div class="zoom clearfix" id="tabs-2">
+			<div class="zoom-slider f-left">
+                <div id="zoomOut" class="spreadsheet-sample-btn">
+                    <div class="spreadsheet-icon zoom-in-icon"></div>
+                </div>
+
+                <div id="zoomSlider"></div>
+
+                <div id="zoomIn" class="spreadsheet-sample-btn">
+                    <div class="spreadsheet-icon zoom-out-icon"></div>
+                </div>
+            </div>
+
+			<div class="f-left">
+                <div id="zoom" class="spreadsheet-sample-btn">
+                    <div class="spreadsheet-icon zoom-reset"></div>
+                </div>
+
+                <div id="zoomSelection" class="spreadsheet-sample-btn">
+                    <div class="spreadsheet-icon zoom-selection"></div>
+                </div>
+            </div>
 		</div>
-		<div class="zoom" id="tabs-2">
-			<div id="zoomIn">Zoom In</div>
-			<div id="zoomSlider"></div>
-			<div id="zoomOut"> Zoom Out</div>
-			<div id="zoom"> Zoom 100%</div>
-			<div id="zoomSelection">Zoom Selection</div>
-		</div>
-		<div class="sheet" id="tabs-3">
+
+		<div class="sheet clearfix" id="tabs-3">
 			<div id="freeze"></div>
-			<div id="split">Split</div>
+			<div id="split" class="spreadsheet-sample-btn">Split</div>
 		</div>
-		<div class="formatting" id="tabs-4">
-			<div id="bold">Bold</div>
-			<div id="italic">Italic</div>
-			<div id="underline">Underline</div>
+
+		<div class="formatting clearfix" id="tabs-4">
+
+			<div id="bold" class="spreadsheet-sample-btn">
+                <div class="spreadsheet-icon ribbon-bold"></div>
+            </div>
+
+			<div id="italic" class="spreadsheet-sample-btn">
+                <div class="spreadsheet-icon ribbon-italic"></div>
+            </div>
+
+			<div id="underline" class="spreadsheet-sample-btn">
+                <div class="spreadsheet-icon ribbon-underline"></div>
+            </div>
+
 		</div>
-		<div class="delete" id="tabs-5">
-			<div id="delSheet">Delete Sheet</div>
-			<div id="delContent">Delete Content</div>
+
+		<div class="delete clearfix" id="tabs-5">
+			<div id="delSheet" class="spreadsheet-sample-btn">Delete Sheet</div>
+			<div id="delContent" class="spreadsheet-sample-btn">Delete_Content</div>
 		</div>
+
 	</div>
-	<div id="spreadsheet"></div>
-	<script type="text/javascript">
-		$.ig.loader({
-			scriptPath: "../../igniteui/js/",
-			cssPath: "../../igniteui/css/",
-			resources: "igSpreadsheet,igExcel.LoadSaveXlsx,igEditors",
-			ready: function () {
-				$("#tabs").tabs();
-				$("#spreadsheet").igSpreadsheet({
-					height: "600",
-					width: "100%"
-				});
-
-				var workbook = null;
-				var xhr = new XMLHttpRequest();
-				xhr.open('GET', '../../data-files/FormattingData.xlsx', true);
-				xhr.responseType = 'arraybuffer';
-
-				xhr.onload = function (e) {
-					// response is unsigned 8 bit integer
-					var responseArray = new Uint8Array(this.response);
-					$.ig.excel.Workbook.load(responseArray, function () {
-						workbook = arguments[0];
-						$("#spreadsheet").igSpreadsheet("option", "workbook", workbook);
-					}, function () {
-						console.log("fail");
-					})
-				};
-
-				xhr.send();
-
-				$("#zoomSlider").slider({
-					change: function (event, ui) {
-						$("#spreadsheet").igSpreadsheet("option", "zoomLevel", ui.value);
-					},
-					min: 10,
-					max: 400,
-					value: 100,
-					step: 1
-				});
-
-				$("#zoomIn").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "zoomIn");
-					var zoomInLevel = $('#spreadsheet').igSpreadsheet('option', "zoomLevel");
-					$("#zoomSlider").slider("value", zoomInLevel);
-				});
-				$("#zoomOut").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "zoomOut");
-					var zoomOutLevel = $('#spreadsheet').igSpreadsheet('option', "zoomLevel");
-					$("#zoomSlider").slider("value", zoomOutLevel);
-				});
-				$("#zoom").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "zoomTo100");
-					var zoomLevel = $('#spreadsheet').igSpreadsheet('option', "zoomLevel");
-					$("#zoomSlider").slider("value", zoomLevel);
-				});
-				$("#zoomSelection").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "zoomToSelection");
-					var zoomSelectionLevel = $('#spreadsheet').igSpreadsheet('option', "zoomLevel");
-					$("#zoomSlider").slider("value", zoomSelectionLevel);
-				});
-
-				$("#split").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "toggleSplitPanes");
-				});
-
-				$("#gridlines").igCheckboxEditor({
-					checked: true,
-					valueChanged: function (evt, ui) {
-						if (ui.newState) {
-							$("#spreadsheet").igSpreadsheet("option", "areGridlinesVisible", true);
-						} else {
-							$("#spreadsheet").igSpreadsheet("option", "areGridlinesVisible", false);
-						}
-					}
-				});
-				$("#headings").igCheckboxEditor({
-					checked: true,
-					valueChanged: function (evt, ui) {
-						if (ui.newState) {
-							$("#spreadsheet").igSpreadsheet("option", "areHeadersVisible", true);
-						} else {
-							$("#spreadsheet").igSpreadsheet("option", "areHeadersVisible", false);
-						}
-					}
-				});
-				$("#formulabar").igCheckboxEditor({
-					checked: true,
-					valueChanged: function (evt, ui) {
-						if (ui.newState) {
-							$("#spreadsheet").igSpreadsheet("option", "isFormulaBarVisible", true);
-						} else {
-							$("#spreadsheet").igSpreadsheet("option", "isFormulaBarVisible", false);
-						}
-					}
-				});
-				var listItems = [{ id: 1, action: "freeze pane" }, { id: 2, action: "freeze first row" }, { id: 3, action: "freeze first column" }];
-				$("#freeze").igCombo({
-					dataSource: listItems,
-					textKey: "action",
-					valueKey: "id",
-					width: "150px",
-					autoSelectFirstMatch: false,
-					selectionChanged: function (evt, ui) {
-						if (ui.items[0].data.id == 1) {
-							if (ui.items[0].data.action == "unfreeze pane") {
-								listItems[0].action = "freeze pane";
-								$("#freeze").igCombo("dataBind");
-							} else {
-								listItems[0].action = "unfreeze pane";
-								$("#freeze").igCombo("dataBind");
-							}
-							$('#spreadsheet').igSpreadsheet('executeAction', "toggleFreezePanes");
-						} else if (ui.items[0].data.id == 2) {
-							$('#spreadsheet').igSpreadsheet('executeAction', "freezeFirstRow");
-							listItems[0].action = "unfreeze pane";
-							$("#freeze").igCombo("dataBind");
-						} else {
-							$('#spreadsheet').igSpreadsheet('executeAction', "freezeFirstColumn");
-							listItems[0].action = "unfreeze pane";
-							$("#freeze").igCombo("dataBind");
-						}
-					}
-				});
-				$("#delSheet").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "deleteWorksheets");
-				});
-				$("#delContent").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "clearContents");
-				});
-				$("#bold").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "toggleBold");
-				});
-				$("#italic").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "toggleItalic");
-				});
-				$("#underline").click(function () {
-					$('#spreadsheet').igSpreadsheet('executeAction', "toggleUnderline");
-				});
-			}
-		});
-	</script>
-</link>
-
+	<div id="spreadsheet2"></div>
