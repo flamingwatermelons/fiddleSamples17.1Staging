@@ -2,7 +2,7 @@ $(function () {
 $.ig.loader({
 			scriptPath: "http://staging.igniteui.local/17-1/IgniteUI/js/",
 			cssPath: "http://staging.igniteui.local/17-1/IgniteUI/css/",
-			resources: "igSpreadsheet,igExcel.LoadSaveXlsx,igEditors",
+			resources: "igSpreadsheet,igExcel.LoadSaveXlsx,igExcel.Functions,igEditors",
 			ready: function () {
 				if ($("#spreadsheet1").length !== 0) {
 					$("#spreadsheet1").igSpreadsheet({
