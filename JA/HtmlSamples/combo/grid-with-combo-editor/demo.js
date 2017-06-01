@@ -1,0 +1,81 @@
+$(function () {
+
+            var northwindProductsJSON = [
+                { "ID": 0, "メーカー": "Dough Masters", "Name": "パン", "Description": "全粒パン", "ReleaseDate": "1992-01-01T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 4, "Price": "2.5", "CategoryID": 0 },
+                { "ID": 1, "メーカー": "Smith Brothers", "Name": "果汁 100% オレンジ", "Description": "オレンジ ジュース", "ReleaseDate": "1995-10-01T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "3.5", "CategoryID": 1 },
+                { "ID": 2, "メーカー": "Healthy Drinks", "Name": "果汁 100% グレープ", "Description": "グレープ ジュース", "ReleaseDate": "2000-10-01T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "20.9", "CategoryID": 1 },
+                { "ID": 3, "メーカー": "Healthy Drinks", "Name": "果汁 100% レモン", "Description": "レモン ジュース", "ReleaseDate": "2005-10-01T00:00:00.000Z", "DiscontinuedDate": "2006-10-01T00:00:00.000Z", "Rating": 3, "Price": "19.9", "CategoryID": 1 },
+                { "ID": 4, "メーカー": "Healthy Drinks", "Name": "コーヒーマイルド", "Description": "コーヒーマイルド 195g×10缶", "ReleaseDate": "2003-01-05T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "22.99", "CategoryID": 1 },
+                { "ID": 5, "メーカー": "Healthy Drinks", "Name": "コーヒービター", "Description": "コーヒービター 195g×10缶", "ReleaseDate": "2006-08-04T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "22.8", "CategoryID": 1 },
+                { "ID": 6, "メーカー": "Healthy Drinks", "Name": "コーヒーミルク", "Description": "コーヒーミルク 195g×10缶", "ReleaseDate": "2006-11-05T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "18.8", "CategoryID": 1 },
+                { "ID": 7, "メーカー": "Western Electronics", "Name": "DVD プレーヤー", "Description": "1080P DVD プレーヤー", "ReleaseDate": "2006-11-15T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "35.88", "CategoryID": 2 },
+                { "ID": 8, "メーカー": "Western Electronics", "Name": "LCD HDTV", "Description": "100 センチメートル 1080p LCD テレビ", "ReleaseDate": "2008-05-08T00:00:00.000Z", "DiscontinuedDate": null, "Rating": 3, "Price": "1088.8", "CategoryID": 2 }
+            ],
+
+            northWindCategoriesJSON = [
+                { "ID": 0, "Name": "食品" },
+                { "ID": 1, "Name": "飲料" },
+                { "ID": 2, "Name": "技術" }
+            ];
+
+            //Formatting for igGrid cells to display igCombo text as opposed to igCombo value
+            function formatCategoryCombo(val) {
+                var i, category;
+                for (i = 0; i < northWindCategoriesJSON.length; i++) {
+                    category = northWindCategoriesJSON[i];
+                    if (category.ID == val) {
+                        val = category.Name;
+                    }
+                }
+
+                return val;
+            }
+
+            function showFeedback(elementID, message) {
+                var selector = '#' + elementID;
+                $(selector).stop(true, true).html(message)
+                    .fadeIn(500).delay(3000).fadeOut(500);
+            }
+
+            //Grid Initialization
+            $("#gridProducts").igGrid({
+                dataSource: northwindProductsJSON,
+                autoGenerateColumns: false,
+                primaryKey: "ID",
+                autoCommit: true,
+                width: "100%",
+                height: "360px",
+                columns: [
+                    { headerText: "", key: "ID", dataType: "number", hidden: true },
+                    { headerText: "メーカー", key: "Manufacturer", dataType: "string", width: "20%" },
+                    { headerText: "名前", key: "Name", dataType: "string", width: "20%" },
+                    { headerText: "説明", key: "Description", dataType: "string", width: "30%" },
+                    { headerText: "カテゴリ", key: "CategoryID", dataType: "number", width: "30%", formatter: formatCategoryCombo }
+                ],
+                features: [
+                    {
+                        name: 'Updating',
+                        columnSettings: [{
+                            //The combo is defined as an editor provider. Combo options are defined under 'editorOptions'.
+                            columnKey: "CategoryID",
+                            editorType: 'combo',
+                            required: true,
+                            editorOptions: {
+                                mode: "dropdown",
+                                dataSource: northWindCategoriesJSON,
+                                textKey: "Name",
+                                valueKey: "ID"
+                            }
+                        }],
+                        editRowEnded: function () {
+                            //To access the updated igGrid data
+                            northwindProductsJSON = $("#gridProducts").igGrid().data().igGrid.dataSourceObject();
+
+                            //Show feedback
+                            var message = "igGrid のデータが更新されました。";
+                            showFeedback("updatedMessage", message);
+                        }
+                    }
+                ]
+            });
+        });

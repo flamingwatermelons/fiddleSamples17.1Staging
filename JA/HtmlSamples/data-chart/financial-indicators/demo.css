@@ -1,0 +1,12 @@
+#priceChart, #indicatorChart {
+            margin: 10px 0px 10px 0px;
+        }
+
+        .selectionOptions {
+            width: 450px;
+            margin-top: 10px;
+        }
+
+            .selectionOptions > label {
+                display: block;
+            }
