@@ -1,12 +1,4 @@
-$(function () {
-$.ig.loader({
-            scriptPath: "http://staging.igniteui.local/17-1/IgniteUI/js/",
-            cssPath: "http://staging.igniteui.local/17-1/IgniteUI/css/",
-            resources: 'igHierarchicalGrid,' +
-                'igGridExcelExporter'
-        });
-
-        $.ig.loader(function() {
+$(function() {
 
             $("#hierarchicalGrid").igHierarchicalGrid({
                 width: "100%",
@@ -56,4 +48,3 @@ $.ig.loader({
                 });
             })
         });
-});
